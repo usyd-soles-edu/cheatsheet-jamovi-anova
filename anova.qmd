@@ -1,0 +1,156 @@
+---
+title: ANOVA in Jamovi
+subtitle: Cheatsheet
+date: today
+lightbox: true
+---
+
+```{r setup}
+#| include: false
+
+if (!require("Require")) {
+    install.packages("Require")
+    require("Require")
+}
+Require(c(
+    tidyverse, gt, readxl, palmerpenguins
+))
+possums <- readxl::read_excel("possum_bw.xlsx")
+```
+
+
+::: {.grid}
+::: {.g-col-6}
+{{< include _license.qmd >}}
+
+::: {.callout-note collapse="false"}
+## Assumed knowledge
+- You have [Jamovi installed](), ideally 2.5.7.0 or later.
+- You can follow instructions to select, click and drag elements in Jamovi.
+- You already understand what ANOVA is and when to use it.
+:::
+:::
+::: {.g-col-6}
+{{< include _tidy.qmd >}}
+
+::: {.callout-warning}
+## Data
+## Download data
+We have two separate datasets. The first dataset is part of the possums dataset used in [BIOL2022](https://www.sydney.edu.au/units/BIOL2022) labs. It contains two numerical variables: `ExpBLUP` and `AactiveTBLUP`. The data is available in the file `possums-blup.csv`.
+
+The second dataset, `penguins.csv`, contains data collected by Dr. Kristen Gorman and the Palmer Station, Antarctica LTER. Details about the dataset can be found [here](https://allisonhorst.github.io/palmerpenguins/).
+
+{{< downloadthis possums-blup.csv dname="possums-blup" label="possums-blup.csv" type="primary" >}} {{< downloadthis penguins.csv dname="penguins" label="penguins.csv" type="primary" >}}
+
+:::
+:::
+:::
+
+
+## About
+ANOVA summaries are often used when the model's predictors/explanatory variables are **categorical**. This cheatsheet shows you how to perform ANOVA techniques in R.
+
+ANOVA answers questions such as:
+
+- Are there differences in plant height between these two locations? (Yes, similar to a two-sample *t*-test).
+- Is location a significant predictor of species diversity?
+- Is the mean height of kangaroos different between different species?
+
+[**Interpretation of the results is not covered here.**]{style="color:red"}
+
+## Before we begin: install GAMLj3 module
+
+::: {.callout-important collapse="false"}
+
+The **GAMLj3** module allows us to perform ANOVA as a GLM in Jamovi, which is not possible by default. To install the module, follow these steps:
+
+1. Select the **Analyses** tab.
+2. Click on the **Modules** button, and select **jamovi library**.
+3. Scroll down to find or do a search for **GAMLj3**.
+4. Click **INSTALL**, and wait for the installation to complete.
+5. Exit by clicking on the upper-right arrow button.
+
+![Installing a module in Jamovi. Click to enlarge.](assets/jamovi_install_GAMLj3.gif)
+:::
+
+## Similarity between ANOVA and linear regression
+
+ANOVA results are identical to linear regression results when the predictors are categorical. We will show how to use the general linear model (GLM) approach to test some models in Jamovi. The traditional ANOVA approach is also provided.
+
+## The models
+Below are two GLM models: one with a single categorical predictor and one with two categorical predictors -- including an interaction term. 
+
+- The **first** model is equivalent to a One-way ANOVA: $\text{body mass} \sim \text{species}$
+- The **second** model is equivalent to a Two-way ANOVA: $\text{body mass} \sim \text{species} \times \text{sex}$
+
+## Import penguins data
+To import the data:
+
+1. Click on the Menu icon: ![](assets/jamovimenu.png){width=20px}
+2. Select Open > Browse, and navigate to the downloaded file. 
+3. Click Open to load the data.
+
+## Run the ANOVA models
+
+::: panel-tabset
+
+## General linear model (recommended)
+
+### 1. Construct the model
+1. Click on the **Analyses** tab and select **Linear Models**. Then select **General Linear Model**.
+2. Drag the `body_mass_g` variable to the **Dependent Variables** box.
+3. Drag the `species` variable to the **Factors** box.
+4. If you want to include the second predictor, `sex`, drag it to the **Factors** box as well.
+5. With two predictors, you can also include an interaction term. This might be included by default, but if not:
+   a. Expand the **Model** tab.
+   b. Holding the `Ctrl` key, select both `species` and `sex`. Then click on the bottom arrow to select **Interaction**.
+
+![GLM with one categorical variable, and assumption checking.](assets/anova-modelling-oneway.gif)
+
+### 2. Check assumptions
+1. Click on the **Assumption Checks** tab.
+2. Select any of the options to check the assumptions.
+
+### 3. Post-hoc
+For predictors with more than two levels, you might want to perform post-hoc tests to determine which levels are different.
+
+1. Click on the **Post Hoc Tests** tab.
+2. Drag the variable to test from the left box, to the right box.
+3. Select the correction method (e.g., Bonferroni) and whether you prefer confidence intervals by ticking the appropriate boxes.
+4. You can export the results as a table the same way as the ANOVA table (see below).
+
+![Performing post hoc tests.](assets/anova-posthoc.gif)
+
+### 4. Export the ANOVA or Regression table
+1. Right-click on the table in the results pane.
+2. Select **Copy**.
+3. Open MS Word, Google Docs or equivalent, and paste.
+4. Edit the table as you see fit.
+
+![Exporting table outputs to MS Word.](assets/anova-export.gif)
+
+## ANOVA
+
+### 1. Construct the model
+1. Click on the **Analyses** tab and select **ANOVA**. Then select **One-Way ANOVA**.
+2. Drag the `body_mass_g` variable to the **Dependent Variable** box.
+3. Drag the `species` variable to the **Grouping Variable** box. You can add more categorical predictors if needed.
+
+### 2. Check assumptions
+1. In the **Assumption Checks** section, select all the options to check the assumptions of the model.
+2. Stick to the Welch's ANOVA as it is more robust, but if the assumption of equal variances is met, you can also tick on **Assume equal (Fisher's)** in he **Variances** section to perform a standard one-way ANOVA.
+
+### 3. Export the ANOVA table
+1. Right-click on the table in the results pane.
+2. Select **Copy**.
+3. Open MS Word, Google Docs or equivalent, and paste.
+4. Edit the table as you see fit.
+
+:::
+
+## Other resources
+
+- It might be worthwhile to use the [`performance`](https://easystats.github.io/performance/) package to assess model fit (including assumptions using `check_model()`).
+- I use this a lot: the [`interactions`](https://interactions.jacob-long.com/) package for visualising interactions in GLM models. However it is very technical and not for beginners -- use if you are comfortable with R.
+- The `rstatix` package has a useful function called [`anova_summary()`](https://rpkgs.datanovia.com/rstatix/reference/anova_summary.html) to produce *almost publishable* ANOVA tables. You will still need to manipulate it to make it look nice.
+
