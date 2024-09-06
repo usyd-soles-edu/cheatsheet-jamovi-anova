@@ -150,7 +150,5 @@ For predictors with more than two levels, you might want to perform post-hoc tes
 
 ## Other resources
 
-- It might be worthwhile to use the [`performance`](https://easystats.github.io/performance/) package to assess model fit (including assumptions using `check_model()`).
-- I use this a lot: the [`interactions`](https://interactions.jacob-long.com/) package for visualising interactions in GLM models. However it is very technical and not for beginners -- use if you are comfortable with R.
-- The `rstatix` package has a useful function called [`anova_summary()`](https://rpkgs.datanovia.com/rstatix/reference/anova_summary.html) to produce *almost publishable* ANOVA tables. You will still need to manipulate it to make it look nice.
-
+- Jamovi documentation on [ANOVA](https://docs.jamovi.org/_pages/jg_32_anova-factorial.html).
+  
