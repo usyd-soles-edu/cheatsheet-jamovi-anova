@@ -48,7 +48,7 @@ The second dataset, `penguins.csv`, contains data collected by Dr. Kristen Gorma
 
 
 ## About
-ANOVA summaries are often used when the model's predictors/explanatory variables are **categorical**. This cheatsheet shows you how to perform ANOVA techniques in R.
+ANOVA summaries are often used when the model's predictors/explanatory variables are **categorical**. This cheatsheet shows you how to perform ANOVA techniques in **Jamovi**.
 
 ANOVA answers questions such as:
 
